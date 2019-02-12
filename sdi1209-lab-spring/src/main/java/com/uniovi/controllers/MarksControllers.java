@@ -37,7 +37,10 @@ public class MarksControllers {
 	 */
 	@RequestMapping(value = "/mark/add", method = RequestMethod.POST)
 	public String setMark(@ModelAttribute Mark mark) {
-		return "added: " + mark.getDescription() + " with score : " + mark.getScore() + " id: " + mark.getId();
+		return "added: " + mark.getDescription() 
+			+ " with score : " 
+			+ mark.getScore() 
+			+ " id: " + mark.getId();
 	}
 
 	/**
