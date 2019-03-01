@@ -25,22 +25,17 @@ public class Mark {
 	
 	
 	/**
-	 * Default constructor
+	 * Constructor por defecto
 	 */
 	public Mark() {
 	}
 	
 	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-	
-	/**
-	 * @param id
-	 * @param description
-	 * @param score
+	 * Constructor con parámetros
+	 * 
+	 * @param id identificador de la nota
+	 * @param description descripcion de la nota
+	 * @param score nota nuumérica
 	 */
 	public Mark(Long id, String description, Double score) {
 		super();
@@ -49,6 +44,13 @@ public class Mark {
 		this.score = score;
 	}
 
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+	
 	/**
 	 * @param id the id to set
 	 */
