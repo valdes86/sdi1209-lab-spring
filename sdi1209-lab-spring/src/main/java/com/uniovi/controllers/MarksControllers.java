@@ -27,7 +27,9 @@ public class MarksControllers {
 	private MarksService marksService;
 
 	/**
-	 *  Método Get que que lista las notas y devuelve a la vista con la lista de notas
+	 * Método Get que que lista las notas y devuelve a la vista con la lista de
+	 * notas
+	 * 
 	 * @return vista con la lista de notas
 	 */
 	@RequestMapping("/mark/list")
@@ -38,15 +40,17 @@ public class MarksControllers {
 
 	/**
 	 * Método get que dirige a la vista de anadir nota
+	 * 
 	 * @return vista de anadir nota
 	 */
-	@RequestMapping(value="/mark/add")
-	public String getMark(){
-	return "mark/add";
+	@RequestMapping(value = "/mark/add")
+	public String getMark() {
+		return "mark/add";
 	}
 
 	/**
 	 * Método post que aniade la nota y devuelve la vista a la lista de notas
+	 * 
 	 * @param mark nota a aniadir
 	 * @return vista a la lista de notas
 	 */
@@ -58,8 +62,9 @@ public class MarksControllers {
 
 	/**
 	 * Método get que devuelve la vista de detalle de la nota
+	 * 
 	 * @param model modelo de dato que viaja en la petición
-	 * @param id identificador de la nota
+	 * @param id    identificador de la nota
 	 * @return vista de detalle de la nota
 	 */
 	@RequestMapping("/mark/details/{id}")
@@ -70,6 +75,7 @@ public class MarksControllers {
 
 	/**
 	 * Método get que elimina una nota y devuelve la vista de la lista de notas
+	 * 
 	 * @param id Identificador de la nota
 	 * @return vista de la lista de notas
 	 */
@@ -81,8 +87,9 @@ public class MarksControllers {
 
 	/**
 	 * Método get que devuelve la vista de detalle de una nota
+	 * 
 	 * @param model modelo de dato que viaja en la petición
-	 * @param id identificador de la nota
+	 * @param id    identificador de la nota
 	 * @return vista de detalle de una nota
 	 */
 	@RequestMapping(value = "/mark/edit/{id}")
@@ -92,10 +99,12 @@ public class MarksControllers {
 	}
 
 	/**
-	 * Método post que modifica un detalle de la nota y devuelve a la vista de detalle de la nota
-	 * @param model modelo de dato que viaja en la petición 
-	 * @param id identificador de la nota
-	 * @param mark nota del detalle que se modificará
+	 * Método post que modifica un detalle de la nota y devuelve a la vista de
+	 * detalle de la nota
+	 * 
+	 * @param model modelo de dato que viaja en la petición
+	 * @param id    identificador de la nota
+	 * @param mark  nota del detalle que se modificará
 	 * @return vista de detalle de la nota
 	 */
 	@RequestMapping(value = "/mark/edit/{id}", method = RequestMethod.POST)
@@ -103,5 +112,16 @@ public class MarksControllers {
 		mark.setId(id);
 		marksService.addMark(mark);
 		return "redirect:/mark/details/" + id;
+	}
+
+	/**
+	 * Método get que actualiza la tabla de notas unicamente
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/mark/list/update")
+	public String updateList(Model model) {
+		model.addAttribute("markList", marksService.getMarks());
+		return "mark/list :: tableMarks";
 	}
 }
