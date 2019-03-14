@@ -11,6 +11,8 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.uniovi.entities.Mark;
@@ -75,6 +77,21 @@ public class MarksService {
 	 */
 	public void deleteMark(Long id) {
 		marksRepository.deleteById(id);
+	}
+
+	/**
+	 * Actualiza el valor "reenviado" de una nota
+	 * 
+	 * @param revised valor booleano a actualizar
+	 * @param id      identificador de la nota
+	 */
+	public void setMarkResend(boolean revised, Long id) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String dni = auth.getName();
+		Mark mark = marksRepository.findById(id).get();
+		if (mark.getUser().getDni().equals(dni)) {
+			marksRepository.updateResend(revised, id);
+		}
 	}
 
 }

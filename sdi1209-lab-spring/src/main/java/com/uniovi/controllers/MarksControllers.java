@@ -134,12 +134,37 @@ public class MarksControllers {
 	/**
 	 * Método get que actualiza la tabla de notas unicamente
 	 * 
-	 * @param model
-	 * @return
+	 * @param model modelo de dato que viaja en la petición
+	 * @return actualiza la tabla de notas
 	 */
 	@RequestMapping("/mark/list/update")
 	public String updateList(Model model) {
 		model.addAttribute("markList", marksService.getMarks());
 		return "mark/list :: tableMarks";
+	}
+
+	/**
+	 * Pone a <code>TRUE</code> el atributo <code>resend</code> de una nota
+	 * 
+	 * @param model modelo de dato que viaja en la petición
+	 * @param id identificador de la nota
+	 * @return redirije a la lista de notas
+	 */
+	@RequestMapping(value = "/mark/{id}/resend", method = RequestMethod.GET)
+	public String setResendTrue(Model model, @PathVariable Long id) {
+		marksService.setMarkResend(true, id);
+		return "redirect:/mark/list";
+	}
+
+	/**
+	 * Pone a <code>FALSE</code> el atributo <code>resend</code> de una nota
+	 * @param model  modelo de dato que viaja en la petición
+	 * @param id identificador de la nota
+	 * @return redirije a la lista de notas
+	 */
+	@RequestMapping(value = "/mark/{id}/noresend", method = RequestMethod.GET)
+	public String setResendFalse(Model model, @PathVariable Long id) {
+		marksService.setMarkResend(false, id);
+		return "redirect:/mark/list";
 	}
 }
