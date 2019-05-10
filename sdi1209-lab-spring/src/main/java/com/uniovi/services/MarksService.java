@@ -96,20 +96,43 @@ public class MarksService {
 	}
 
 	/**
-	 * Devuelve las notas del usuario legueado si es un alumno o todas las notas si es un profesor
-	 * @param user Usuario 
+	 * Devuelve las notas del usuario legueado si es un alumno o todas las notas si
+	 * es un profesor
+	 * 
+	 * @param user Usuario
 	 * @return Lista de notas
 	 */
-	public List<Mark> getMarksForUser(User user){
-		
+	public List<Mark> getMarksForUser(User user) {
+
 		List<Mark> marks = new ArrayList<Mark>();
-		
-		if(user.getRole().equals("ROLE_STUDENT")) {
-			marks =  marksRepository.findAllByUser(user);
+
+		if (user.getRole().equals("ROLE_STUDENT")) {
+			marks = marksRepository.findAllByUser(user);
 		}
-		if(user.getRole().equals("ROLE_PROFESSOR")) {
-			marks = getMarks();		
-			}
+		if (user.getRole().equals("ROLE_PROFESSOR")) {
+			marks = getMarks();
+		}
+		return marks;
+	}
+
+	/**
+	 * Se encarga de realizar una búsqueda en las notas: las notas del propio
+	 * usuario si el usuario autenticado es ROLE_STUDENT o las notas de todos los
+	 * usuarios si el usuario autenticado es ROLE_PROFESSOR.
+	 * 
+	 * @param searchText Texto de busqueda
+	 * @param user       Usuario
+	 * @return Lista de notas
+	 */
+	public List<Mark> searchMarksByDescriptionAndNameForUser(String searchText, User user) {
+		List<Mark> marks = new ArrayList<Mark>();
+		searchText = "%"+searchText+"%";
+		if (user.getRole().equals("ROLE_STUDENT")) {
+			marks = marksRepository.searchByDescriptionNameAndUser(searchText, user);
+		}
+		if (user.getRole().equals("ROLE_PROFESSOR")) {
+			marks = marksRepository.searchByDescriptionAndName(searchText);
+		}
 		return marks;
 	}
 
