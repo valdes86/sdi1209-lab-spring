@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import com.uniovi.entities.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -92,6 +93,24 @@ public class MarksService {
 		if (mark.getUser().getDni().equals(dni)) {
 			marksRepository.updateResend(revised, id);
 		}
+	}
+
+	/**
+	 * Devuelve las notas del usuario legueado si es un alumno o todas las notas si es un profesor
+	 * @param user Usuario 
+	 * @return Lista de notas
+	 */
+	public List<Mark> getMarksForUser(User user){
+		
+		List<Mark> marks = new ArrayList<Mark>();
+		
+		if(user.getRole().equals("ROLE_STUDENT")) {
+			marks =  marksRepository.findAllByUser(user);
+		}
+		if(user.getRole().equals("ROLE_PROFESSOR")) {
+			marks = getMarks();		
+			}
+		return marks;
 	}
 
 }

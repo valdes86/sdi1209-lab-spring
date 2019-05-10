@@ -3,12 +3,15 @@
  */
 package com.uniovi.controllers;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.uniovi.entities.Mark;
+import com.uniovi.entities.User;
 import com.uniovi.services.MarksService;
 import com.uniovi.services.UsersService;
 
@@ -43,11 +47,11 @@ public class MarksControllers {
 	 * 
 	 * @return vista con la lista de notas
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping("/mark/list")
-	public String getList(Model model) {
-
-		model.addAttribute("markList", marksService.getMarks());
+	public String getList(Model model, Principal principal) {
+		String dni = principal.getName(); // DNI es el name de la autenticación
+		User user = usersService.getUserByDni(dni);
+		model.addAttribute("markList", marksService.getMarksForUser(user));
 		return "mark/list";
 	}
 
@@ -138,8 +142,10 @@ public class MarksControllers {
 	 * @return actualiza la tabla de notas
 	 */
 	@RequestMapping("/mark/list/update")
-	public String updateList(Model model) {
-		model.addAttribute("markList", marksService.getMarks());
+	public String updateList(Model model, Principal principal) {
+		String dni = principal.getName(); // DNI es el name de la autenticación
+		User user = usersService.getUserByDni(dni);
+		model.addAttribute("markList", marksService.getMarksForUser(user));
 		return "mark/list :: tableMarks";
 	}
 
@@ -147,7 +153,7 @@ public class MarksControllers {
 	 * Pone a <code>TRUE</code> el atributo <code>resend</code> de una nota
 	 * 
 	 * @param model modelo de dato que viaja en la petición
-	 * @param id identificador de la nota
+	 * @param id    identificador de la nota
 	 * @return redirije a la lista de notas
 	 */
 	@RequestMapping(value = "/mark/{id}/resend", method = RequestMethod.GET)
@@ -158,8 +164,9 @@ public class MarksControllers {
 
 	/**
 	 * Pone a <code>FALSE</code> el atributo <code>resend</code> de una nota
-	 * @param model  modelo de dato que viaja en la petición
-	 * @param id identificador de la nota
+	 * 
+	 * @param model modelo de dato que viaja en la petición
+	 * @param id    identificador de la nota
 	 * @return redirije a la lista de notas
 	 */
 	@RequestMapping(value = "/mark/{id}/noresend", method = RequestMethod.GET)
@@ -167,4 +174,6 @@ public class MarksControllers {
 		marksService.setMarkResend(false, id);
 		return "redirect:/mark/list";
 	}
+
+	
 }
